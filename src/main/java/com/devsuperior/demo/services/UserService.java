@@ -22,13 +22,14 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<UserDetailsProjection> result = repository.searchUserAndRoleByEmail(username);
 
+
         if(result.isEmpty()){
             throw new UsernameNotFoundException("User not found");
         }
 
         User user = new User();
         user.setEmail(username);
-        user.setPassword(result.get(0).getUserPassword());
+        user.setPassword(result.get(0).getPassword());
 
         for(UserDetailsProjection projection : result){
             user.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
